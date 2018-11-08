@@ -2,27 +2,29 @@ package com.aredchets.drumsalgorithms
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
+import com.aredchets.drumsalgorithms.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    private val fragmentManager = supportFragmentManager
+    private var bundle: Bundle? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
-                navigateTo(FirstFragment())
+            R.id.navigation_menu -> {
+                navigateToFragment(MenuFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                navigateTo(SecondFragment())
+                val fragment = DashboardFragment()
+                if (bundle != null) {
+                    fragment.arguments = bundle
+                }
+                navigateToFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-                navigateTo(ThirdFragment())
+            R.id.navigation_metronome -> {
+                navigateToFragment(MetronomeFragment())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -34,14 +36,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigateTo(FirstFragment())
-
+        setNavigationTo(R.id.navigation_menu)
     }
 
-    fun navigateTo(fragment: Fragment) {
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment, fragment.javaClass.simpleName)
-                .commit()
+    fun navigateWithData(bundle : Bundle) {
+        this.bundle = bundle
+        navigation.selectedItemId = R.id.navigation_dashboard
+    }
+
+    fun setNavigationTo(id : Int) {
+        navigation.selectedItemId = id
     }
 }
