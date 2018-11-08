@@ -65,6 +65,7 @@ class MetronomeFragment : Fragment() {
 
     inner class MetronomeTimerTask : TimerTask() {
 
+        // use coroutines
         override fun run() {
             play()
         }
