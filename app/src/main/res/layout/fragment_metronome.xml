@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
@@ -13,11 +13,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <TextView
+            android:id="@+id/tv_bmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"/>
+
+        <SeekBar
+            android:id="@+id/pb_tempo"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:progressDrawable="@drawable/tempo_background_drawable"
+            android:max="218" />
+
         <Button
             android:id="@+id/button_play_beep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PLAY"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:text="@string/button_play"
             android:background="@color/colorPrimary"
             android:textColor="#fff" />
 
@@ -26,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="STOP"
+            android:layout_gravity="center"
+            android:text="@string/button_stop"
             android:background="@color/colorPrimary"
             android:textColor="#fff" />
 

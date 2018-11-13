@@ -12,7 +12,7 @@ class MainActivity : BaseActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_menu -> {
-                navigateToFragment(MenuFragment())
+                navigateToFragment(MenuFragment(), false)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
@@ -20,11 +20,11 @@ class MainActivity : BaseActivity() {
                 if (bundle != null) {
                     fragment.arguments = bundle
                 }
-                navigateToFragment(fragment)
+                navigateToFragment(fragment, false)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_metronome -> {
-                navigateToFragment(MetronomeFragment())
+                navigateToFragment(MetronomeFragment(), false)
                 return@OnNavigationItemSelectedListener true
             }
         }

@@ -10,10 +10,13 @@ import com.aredchets.drumsalgorithms.R
  
 abstract class BaseActivity : AppCompatActivity() {
 
-    fun navigateToFragment(fragment: Fragment) {
+    fun navigateToFragment(fragment: Fragment, addToBackStack : Boolean) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, fragment.javaClass.simpleName)
                 .commit()
+        if (addToBackStack) {
+            supportFragmentManager.beginTransaction().addToBackStack("").commit()
+        }
     }
 }

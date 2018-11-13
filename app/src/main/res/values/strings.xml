@@ -3,4 +3,8 @@
     <string name="title_menu">Menu</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_metronome">Metronom</string>
+
+    <string name="text_bmp">%s BMP</string>
+    <string name="button_play">PLAY</string>
+    <string name="button_stop">STOP</string>
 </resources>

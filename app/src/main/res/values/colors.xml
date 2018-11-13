@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="colorTempoBg">#585858</color>
+    <color name="colorTempoMain">@color/colorPrimary</color>
 </resources>
