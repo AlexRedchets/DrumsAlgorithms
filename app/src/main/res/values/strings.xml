@@ -7,4 +7,5 @@
     <string name="text_bmp">%s BMP</string>
     <string name="button_play">PLAY</string>
     <string name="button_stop">STOP</string>
+    <string name="initial_bmp">0 BMP</string>
 </resources>

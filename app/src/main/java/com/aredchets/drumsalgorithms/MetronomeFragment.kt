@@ -11,8 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_metronome.*
-import kotlinx.coroutines.GlobalScope
 import java.util.*
+import javax.xml.datatype.DatatypeConstants.SECONDS
+import android.R.string.cancel
+import java.util.concurrent.*
+
 
 /**
  * @author Alex Redchets
@@ -20,11 +23,11 @@ import java.util.*
  
 class MetronomeFragment : Fragment() {
 
-    lateinit var soundPool : SoundPool
-    lateinit var timer : Timer
-    lateinit var timerTask : MetronomeTimerTask
-    var soundId = 0
-    var hasStarted = false
+    private lateinit var scheduler : ScheduledExecutorService
+    private lateinit var future : ScheduledFuture<*>
+    private lateinit var soundPool : SoundPool
+    private var soundId = 0
+    private var hasStarted = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -43,16 +46,13 @@ class MetronomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tv_bmp.text = resources.getString(R.string.text_bmp, "0")
+        scheduler = Executors.newScheduledThreadPool(1)
 
         button_play_beep.setOnClickListener {
             if (!hasStarted) {
-                timer = Timer()
-                timerTask = MetronomeTimerTask()
-                val re = Regex("[^0-9]")
-                val value = re.replace(tv_bmp.text.toString(), "")
-                if (value.toLong() > 0) {
-                    timer.schedule(timerTask, 0, 60000/value.toLong())
+
+                if (tv_bmp.text.toString().filterForNumber() > 0) {
+                    runScheduled(tv_bmp.text.toString().filterForNumber())
                 }
             }
         }
@@ -65,18 +65,16 @@ class MetronomeFragment : Fragment() {
 
         pb_tempo.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                tv_bmp.text = resources.getString(R.string.text_bmp, p1.toString())
+                setNewValue(p1.toString())
 
                 if (p1 <= 0 && hasStarted) {
-                    timer.cancel()
+                    future.cancel(true)
                     return
                 }
 
-                if (hasStarted && p1 > 0) {
-                    timer.cancel()
-                    timer = Timer()
-                    timerTask = MetronomeTimerTask()
-                    timer.schedule(timerTask, 0, 60000/p1.toLong())
+                if (hasStarted) {
+                    future.cancel(true)
+                    runScheduled(p1.toLong())
                 }
             }
 
@@ -96,22 +94,27 @@ class MetronomeFragment : Fragment() {
     }
 
     fun stop() {
-        timer.cancel()
+        future.cancel(true)
         hasStarted = false
-    }
-
-    inner class MetronomeTimerTask : TimerTask() {
-
-        // use coroutines
-        override fun run() {
-            play()
-        }
     }
 
     override fun onStop() {
         super.onStop()
         if (hasStarted) {
-            timer.cancel()
+            future.cancel(true)
         }
+    }
+
+    private fun setNewValue(value : String) {
+        tv_bmp.text = resources.getString(R.string.text_bmp, value)
+    }
+
+    private fun runScheduled(period : Long) {
+        future = scheduler.scheduleAtFixedRate({
+            play()
+        }, 0, 60000/period, TimeUnit.MILLISECONDS)
+        scheduler.schedule({
+            future.cancel(true)
+        }, Int.MAX_VALUE.toLong(), TimeUnit.SECONDS)
     }
 }
