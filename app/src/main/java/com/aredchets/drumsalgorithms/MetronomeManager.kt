@@ -25,14 +25,10 @@ class MetronomeManager (context: Context?) {
 
     fun stopPlaying() {
         future.cancel(true)
-        mediaPlayer.release()
     }
 
     private fun playSound() {
         mediaPlayer.start()
-        mediaPlayer.setOnCompletionListener {
-            mediaPlayer.release()
-        }
     }
 }
  

@@ -45,10 +45,15 @@ class MetronomeFragment : Fragment() {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 setNewValue(p1.toString())
 
-                if (p1 <= 0 && hasStarted) {
+                if (!hasStarted) {
+                    return
+                }
+
+                if (p1 <= 0) {
                     soundManager.stopPlaying()
                     return
                 }
+
                 startPlay(p1.toLong())
             }
 
